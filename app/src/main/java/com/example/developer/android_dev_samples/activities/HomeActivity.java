@@ -11,6 +11,10 @@ import android.view.MenuItem;
 
 import com.example.developer.android_dev_samples.R;
 
+/**
+ * Home page of this app.
+ */
+
 public class HomeActivity extends AppCompatActivity {
 
     @Override
