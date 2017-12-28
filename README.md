@@ -1,3 +1,3 @@
 # Android Basic development
  
- Implementation of dagger 2 with MVP patter.
+ Implementation of dagger 2 with MVP pattern.
