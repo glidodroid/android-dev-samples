@@ -1,4 +1,4 @@
-package com.example.developer.android_dev_samples.eventbus;
+package com.example.developer.android_dev_samples.rxeventbus;
 
 /**
  * Created by Airbase on 08-Oct-16.

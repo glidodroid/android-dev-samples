@@ -1,9 +1,33 @@
 *.iml
 .gradle
-.idea
 /local.properties
 /.idea/workspace.xml
 /.idea/libraries
 .DS_Store
 /build
 /captures
+.externalNativeBuild
+bin/
+gen/
+*.apk
+*.ap_
+*.class
+
+
+# OS specific
+.DS_Store
+*~
+*.swp
+
+# Legacy
+.classpath
+.project
+
+# IntelliJ IDEA or Android Studio
+.idea/
+*.iml
+
+# Crashlytics
+com_crashlytics_export_strings.xml
+crashlytics-build.properties
+

@@ -1,10 +1,11 @@
-package com.example.developer.android_dev_samples.eventbus;
+package com.example.developer.android_dev_samples.rxeventbus;
 
-import javax.security.auth.Subject;
+import android.util.Pair;
 
 import rx.Observable;
 import rx.subjects.PublishSubject;
 import rx.subjects.SerializedSubject;
+import rx.subjects.Subject;
 
 /**
  * Created by Airbase on 08-Oct-16.
@@ -12,9 +13,9 @@ import rx.subjects.SerializedSubject;
 
 public class RxEventBus {
 
-    private final rx.subjects.Subject<Object, Object> bus = new SerializedSubject<>(PublishSubject.create());
+    private final Subject<Object, Object> bus = new SerializedSubject<>(PublishSubject.create());
 
-    public void post(Object obj) {
+    public void post(Pair<String, Object> obj) {
         bus.onNext(obj);
     }
 
