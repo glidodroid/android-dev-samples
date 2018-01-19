@@ -44,7 +44,7 @@ public class RxActivity extends AppCompatActivity {
     private final CompositeDisposable disposable = new CompositeDisposable();
 
     @BindView(R.id.rxtrigger)
-    Button rxtrigger;
+    Button rxTrigger;
     @BindView(R.id.text_search)
     EditText editText;
     @BindView(R.id.search_image)
@@ -57,10 +57,10 @@ public class RxActivity extends AppCompatActivity {
         setContentView(R.layout.activity_rx);
         ButterKnife.bind(this);
 
-        rxtrigger.setOnClickListener(new View.OnClickListener() {
+        rxTrigger.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // doWork();
+                //doWork();
                 //flatMapFilter();
                 //subject();
                 //disposable();

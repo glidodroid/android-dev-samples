@@ -6,8 +6,13 @@ import com.example.developer.android_dev_samples.SampleApp;
 import com.example.developer.android_dev_samples.home.HomeActivity;
 import com.example.developer.android_dev_samples.home.HomeModule;
 import com.example.developer.android_dev_samples.inject.PerActivity;
+import com.example.developer.android_dev_samples.storage.DbManager;
 
+import javax.inject.Singleton;
+
+import dagger.Binds;
 import dagger.Module;
+import dagger.Provides;
 import dagger.android.AndroidInjectionModule;
 import dagger.android.ContributesAndroidInjector;
 
@@ -18,7 +23,14 @@ import dagger.android.ContributesAndroidInjector;
 @Module(includes = AndroidInjectionModule.class)
 public abstract class AppModule {
 
+    @Binds
     abstract Application application(SampleApp app);
+
+    @Provides
+    @Singleton
+    static DbManager provideDbManager(Application application) {
+        return new DbManager(application);
+    }
 
     @PerActivity
     @ContributesAndroidInjector(modules = HomeModule.class)
