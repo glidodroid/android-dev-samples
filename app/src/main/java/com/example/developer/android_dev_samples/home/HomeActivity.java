@@ -6,6 +6,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 
 import com.example.developer.android_dev_samples.R;
+import com.example.developer.android_dev_samples.storage.PlayerManager;
 
 import javax.inject.Inject;
 
@@ -24,6 +25,8 @@ public class HomeActivity extends AppCompatActivity implements HasFragmentInject
 
     @Inject
     HomeFragment homeFragment;
+    @Inject
+    PlayerManager playerManager;
 
     @BindView(R.id.home_frag_container)
     View homeContainer;
@@ -33,6 +36,8 @@ public class HomeActivity extends AppCompatActivity implements HasFragmentInject
         AndroidInjection.inject(this);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
+        //playerManager.insertRow(10L,"sachin");
+        playerManager.allPlayers();
         addFragment();
     }
 

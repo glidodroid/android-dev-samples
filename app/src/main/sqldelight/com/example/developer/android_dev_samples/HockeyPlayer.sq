@@ -1,0 +1,35 @@
+CREATE TABLE hockey_player (
+    _id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+    player_number INTEGER NOT NULL,
+    name TEXT NOT NULL
+);
+
+-- Further SQL statements are proceeded by an identifier.
+selectAll:
+SELECT *
+FROM hockey_player;
+
+insertRow:
+INSERT INTO hockey_player(player_number, name)
+VALUES (?, ?);
+
+selectByNumber:
+SELECT *
+FROM hockey_player
+WHERE player_number = ?;
+
+selectByNames:
+SELECT *
+FROM hockey_player
+WHERE name IN ?;
+
+firstOrLastName:
+SELECT *
+FROM hockey_player
+WHERE name LIKE '%' || ?1
+OR name LIKE ?1 || '%';
+
+updateNumber:
+UPDATE hockey_player
+SET player_number= ?
+WHERE name = ?;
