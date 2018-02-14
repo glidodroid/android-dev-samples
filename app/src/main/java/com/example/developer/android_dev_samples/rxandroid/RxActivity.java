@@ -24,24 +24,28 @@ import java.util.concurrent.Callable;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import sample.KotlinActivity;
 import io.reactivex.Observable;
 import io.reactivex.ObservableSource;
 import io.reactivex.Observer;
+import io.reactivex.Single;
+import io.reactivex.SingleObserver;
+import io.reactivex.SingleSource;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Consumer;
 import io.reactivex.functions.Function;
 import io.reactivex.functions.Predicate;
+import io.reactivex.observers.DisposableObserver;
 import io.reactivex.schedulers.Schedulers;
 import io.reactivex.subjects.PublishSubject;
+import sample.KotlinActivity;
 import timber.log.Timber;
 
 public class RxActivity extends AppCompatActivity {
 
     private PublishSubject<Integer> subject = PublishSubject.create();
-    private final CompositeDisposable disposable = new CompositeDisposable();
+    private final CompositeDisposable compositeDisposable = new CompositeDisposable();
 
     @BindView(R.id.rxtrigger)
     Button rxTrigger;
@@ -56,15 +60,19 @@ public class RxActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_rx);
         ButterKnife.bind(this);
-
+        setUpSubscription();
         rxTrigger.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 //doWork();
                 //flatMapFilter();
                 //subject();
-                //disposable();
-                startKotlinActivity();
+                //compositeDisposable();
+                //startKotlinActivity();
+                //testSubject();
+                //subject.onNext(1);
+                //subject.onComplete();
+                executeSingle();
 
             }
         });
@@ -105,8 +113,12 @@ public class RxActivity extends AppCompatActivity {
         });
     }
 
+    private void setUpSubscription() {
+        testSubject();
+    }
+
     private void startKotlinActivity() {
-        Intent intent = new Intent(this,KotlinActivity.class);
+        Intent intent = new Intent(this, KotlinActivity.class);
         startActivity(intent);
     }
 
@@ -114,11 +126,11 @@ public class RxActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        disposable.clear();
+        compositeDisposable.clear();
     }
 
     private void disposable() {
-        disposable.add(getSampleObservable()
+        compositeDisposable.add(getSampleObservable()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Consumer<String>() {
@@ -148,6 +160,32 @@ public class RxActivity extends AppCompatActivity {
         subject.onNext(4);
         subject.onNext(5);
         subject.onComplete();
+    }
+
+    private void testSubject() {
+        Disposable disposable = subject.flatMap(new Function<Integer, ObservableSource<String>>() {
+            @Override
+            public ObservableSource<String> apply(Integer integer) throws Exception {
+                return getObservable();
+            }
+        })
+                .subscribeWith(new DisposableObserver<String>() {
+                    @Override
+                    public void onNext(String s) {
+                        Timber.d("on next %s", s);
+                    }
+
+                    @Override
+                    public void onComplete() {
+                        Timber.d("on complete");
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+
+                    }
+                });
+        compositeDisposable.add(disposable);
     }
 
     private void doWork() {
@@ -286,6 +324,10 @@ public class RxActivity extends AppCompatActivity {
         return Observable.just(getList());
     }
 
+    //private Observable<String> getStringObservable() {
+
+    //}
+
     private List<String> getList() {
         List<String> list = new ArrayList<>();
         list.add("Cricket");
@@ -294,4 +336,77 @@ public class RxActivity extends AppCompatActivity {
         list.add("Hockey");
         return list;
     }
+
+    private Single<String> getFirstSingleString() {
+        return Single.just("item one ");
+    }
+
+    private Single<String> getSecondStringBasedOnFirst(String s) {
+        return Single.just(s + "item two");
+    }
+
+    private Single<String> getValueAsSingle() {
+        return getFirstSingleString().flatMap(new Function<String, SingleSource<? extends String>>() {
+            @Override
+            public SingleSource<? extends String> apply(String s) throws Exception {
+                return getSecondStringBasedOnFirst(s);
+            }
+        });
+    }
+
+    private void executeSingle() {
+        getValueAsSingle().subscribeOn(Schedulers.computation())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new SingleObserver<String>() {
+                    @Override
+                    public void onSubscribe(Disposable d) {
+
+                    }
+
+                    @Override
+                    public void onSuccess(String s) {
+                        Timber.d("on single success %s",s);
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+
+                    }
+                });
+    }
+
+    private void executeSingleWithDisposable() {
+      /*  Disposable disposable = getValueAsSingle()
+                .subscribeOn(Schedulers.computation())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeWith(new DisposableSingleObserver<String>(){
+                    @Override
+                    public void onSuccess(String s) {
+
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+
+                    }
+                });*/
+
+      // since dispose in not working in single observer.
+        Disposable disposable = getValueAsSingle()
+                .subscribeOn(Schedulers.computation())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeWith(new AbstractMySingleObserver<String>() {
+                    @Override
+                    protected void success(String item) {
+
+                    }
+
+                    @Override
+                    protected void error(Throwable ex) {
+
+                    }
+                });
+        compositeDisposable.add(disposable);
+    }
+
 }
