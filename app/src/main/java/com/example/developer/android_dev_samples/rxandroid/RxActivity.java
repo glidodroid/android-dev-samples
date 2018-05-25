@@ -16,7 +16,7 @@ import android.widget.TextView;
 
 import com.example.developer.android_dev_samples.R;
 
-import org.apache.commons.lang3.StringUtils;
+
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,7 +24,6 @@ import java.util.concurrent.Callable;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import sample.KotlinActivity;
 import io.reactivex.Observable;
 import io.reactivex.ObservableSource;
 import io.reactivex.Observer;
@@ -36,6 +35,7 @@ import io.reactivex.functions.Function;
 import io.reactivex.functions.Predicate;
 import io.reactivex.schedulers.Schedulers;
 import io.reactivex.subjects.PublishSubject;
+import sample.KotlinActivity;
 import timber.log.Timber;
 
 public class RxActivity extends AppCompatActivity {
@@ -106,7 +106,7 @@ public class RxActivity extends AppCompatActivity {
     }
 
     private void startKotlinActivity() {
-        Intent intent = new Intent(this,KotlinActivity.class);
+        Intent intent = new Intent(this, KotlinActivity.class);
         startActivity(intent);
     }
 
@@ -253,7 +253,8 @@ public class RxActivity extends AppCompatActivity {
                 .filter(new Predicate<String>() {
                     @Override
                     public boolean test(String s) throws Exception {
-                        return StringUtils.equalsIgnoreCase(s, "Cricket");
+                        return false;
+                        //return StringUtils.equalsIgnoreCase(s, "Cricket");
                     }
                 })
                 .subscribeOn(Schedulers.io())
