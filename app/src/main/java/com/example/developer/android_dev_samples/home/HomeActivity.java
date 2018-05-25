@@ -36,7 +36,10 @@ public class HomeActivity extends AppCompatActivity implements HasFragmentInject
         AndroidInjection.inject(this);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
-        //playerManager.insertRow(10L,"sachin");
+        playerManager.insertRow(10L,"sachin");
+        playerManager.insertRow(11L,"dravid");
+        playerManager.insertRow(12L,"shewag");
+        playerManager.insertRow(13L,"ganguly");
         playerManager.allPlayers();
         addFragment();
     }
